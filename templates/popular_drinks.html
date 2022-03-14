@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <title>Most ordered cocktails</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        {% if error_msg %}
+        <div class="error">
+            {{ error_msg }}
+        </div>
+        {% endif %}
+        <section id="intro">
+            <h2>Most popular drinks</h2>
+        </section>
+        <section id="select">
+            <table style="margin: auto;">
+                {%for drink in drinks%}
+                <tr>
+                    <td>{{drink.name}}</td>
+                    <td><progress value="{{drink.count}}" max="{{total}}"> {{drink.count/total}}% </progress></td>
+                    <td>{{drink.count}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br />
+        </section>
+    </div>
+    <div id="addUser" onclick="location.href='/'">
+        Home
+    </div>
+    <footer class="w3-container w3-center w3-opacity">
+        Mit <i class="fa fa-heart" alt="Liebe"></i> gemacht von <a href="https://fabiobarbero.eu">Fabio</a>
+    </footer>
+</body>
+
+</html>

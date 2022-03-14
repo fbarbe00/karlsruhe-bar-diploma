@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <title>Table View</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        {% if error_msg %}
+        <div class="error">
+            {{ error_msg }}
+        </div>
+        {% endif %}
+        <section id="intro">
+            <h2>Table View</h2>
+        </section>
+        <section id="select">
+            <table class="w3-table-all w3-hoverable">
+                <tr>
+                    <th>Schlumpf</th>
+                    {%for drink in drinks%}
+                    <th>{{drink.name}}</th>
+                    {% endfor %}
+                    <th>Count</th>
+                </tr>
+                {%for user in users%}
+                <tr>
+                    <td>
+                        <a href="/user/{{user.name}}">
+                        {{user.name}} {% if user.type == "Bachelor" %}<i class="fa fa-beer"></i>{% endif %} {% if user.type == "Master" %}<i class="fa fa-glass"></i>{% endif %}
+                        </a>
+                    </td>
+                    {%for drink in drinks%}
+                    <td>
+                        {%if (loop.index-1) in user.ordered_drinks%}
+                        <i class="fa fa-check" style="color: green;"></i> {%else%}
+                        <i class="fa fa-times" style="color: red;"></i> {%endif%}
+                    </td>
+                    {% endfor %}
+                    <td>{{user.count}}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th>Total</th>
+                    {%for drink in drinks%}
+                    <th>{{drink.count}}</th>
+                    {% endfor %}
+                    <th></th>
+                </tr>
+            </table>
+            <br />
+        </section>
+    </div>
+    <div id="addUser" onclick="location.href='/'">
+        Home
+    </div>
+    <footer class="w3-container w3-center w3-opacity">
+        Mit <i class="fa fa-heart" alt="Liebe"></i> gemacht von <a href="https://fabiobarbero.eu">Fabio</a>
+    </footer>
+</body>
+
+</html>

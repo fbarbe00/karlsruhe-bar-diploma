@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cocktail Bachelor und Master</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body id="body" class="drinks">
+    <div class="container">
+        {% if error_msg %}
+        <div class="error">
+            {{ error_msg }}
+        </div>
+        {% endif %}
+        <section id="intro">
+            <h2>{{ user.name }} ({{progress.type}})</h2>
+            <progress id="progress" value="{{progress.current}}" max="{{progress.total}}"> {{progress.current/progress.total}}% </progress>
+        </section>
+        <!-- <div style="text-align:right">
+            <input id="remove_check" class="w3-check" type="checkbox" onclick="document.getElementById('body').classList.toggle('danger');">
+            <label>Remove Drinks</label></p>
+        </div> -->
+        <section id="select">
+            {%for drink in drinks%} {% if drink.ordered %}
+            <div class="user-type selected" onclick="handleDrink(this)" id="{{loop.index}}">
+                <img src="{{url_for('static', filename=drink.img)}}" alt="German Beer Drinker" /><br> {{drink.name}}
+            </div>
+            {% else %}
+            <div class="user-type" onclick="handleDrink(this)" id="{{loop.index}}">
+                <img src="{{url_for('static', filename=drink.img)}}" alt="German Beer Drinker" /><br> {{drink.name}}
+            </div>
+            {% endif %} {% endfor %}
+            <br />
+        </section>
+        <div id="addUser" onclick="location.href='/'">
+            Home
+        </div>
+        <i style="margin-left: 2%;">Zuletzt editiert: {{ user.last_edit }} ({{user.last_edit_date}})</i>
+    </div>
+
+    <footer class="w3-container w3-center w3-opacity w3-white">
+        Mit <i class="fa fa-heart" alt="Liebe"></i> gemacht von <a href="https://fabiobarbero.eu">Fabio</a>
+    </footer>
+    <script>
+        function handleDrink(el) {
+            // var remove_mode = document.getElementById('remove_check').value;
+            if (el.classList.contains('selected')) {
+                document.getElementById('body').classList.toggle('danger');
+                var userCheck = confirm("Are you sure you want to remove this drink?");
+                if (userCheck) {
+                    document.location = "/remove_drink/{{user.name}}/" + el.id;
+                }
+                // document.getElementById('remove_check').checked = false;
+                document.getElementById('body').classList.toggle('danger');
+            } else {
+                document.location = "/add_drink/{{user.name}}/" + el.id;
+            }
+
+        }
+    </script>
+</body>
+
+</html>

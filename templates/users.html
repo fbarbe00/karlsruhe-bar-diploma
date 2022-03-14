@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cocktail Bachelor und Master</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="container">
+        {% if is_admin %}
+        <a onclick="confirmDelete('losers')" href="#" style="margin-left: 2%;color:red"><i class="fa fa-trash"></i><i>Archive the losers</i></a>
+        <a onclick="confirmDelete('archive')" href="#" style="margin-left: 2%;color:red"><i class="fa fa-archive"></i><i>Archive the winners</i></a>
+        {% endif %}
+        {% if error_msg %}
+        <div class="error">
+            {{ error_msg }}
+        </div>
+        {% endif %}
+        <section id="intro">
+            <h2>Die Schlümpfe</h2>
+        </section>
+        <section id="select">
+            <!-- for each user -->
+            {%for user in users%}
+            <div class="user-type {%if user.completed%}selected{%endif%}" id="{{user.name}}" onclick="location.href='/user/{{user.name}}'">
+                <img src="{{url_for('static', filename=user.type + '.png')}}" alt="German Beer Drinker" /><br> {{user.name}}
+            </div>
+            {% endfor %}
+        </section>
+
+        <div id="addUser">
+            Hinzufügen
+        </div>
+        <br \>
+        <a href="/popular_drinks" style="margin-left: 2%;"><i class="fa fa-arrow-right"></i><i>Meist bestellte Cocktails</i></a><br />
+        <a href="/table_view" style="margin-left: 2%;"><i class="fa fa-arrow-right"></i><i>Table view</i></a>
+    </div>
+    <div id="add_user_modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Schlumpf hinzufügen</h2>
+            </div>
+            <div class="modal-body">
+                <br/>
+                <br/>
+                <br/>
+                <form method="POST" action="{{ url_for('add_user') }}" class="w3-container">
+                    <input id="new_name" type="text" name="name" placeholder="Name" class="w3-input w3-animate-input" autocomplete="off" required>
+
+                    <input type="radio" id="bachelor" name="type" value="Bachelor" class="w3-radio" checked>
+                    <label for="bachelor">Bachelor</label><br>
+                    <input type="radio" id="master" name="type" value="Master" class="w3-radio">
+                    <label for="master">Master</label><br><br>
+
+                    <input type="submit" value="Submit" class="w3-btn w3-green">
+                </form>
+                <br/>
+                <br/>
+                <br/>
+            </div>
+            <div class="modal-footer">
+                <i>So many alcoholics in this town...</i>
+            </div>
+        </div>
+
+    </div>
+    <footer class="w3-container w3-center w3-opacity">
+        Mit <i class="fa fa-heart" alt="Liebe"></i> gemacht von <a href="https://fabiobarbero.eu">Fabio</a>
+    </footer>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("add_user_modal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("addUser");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function() {
+            modal.style.display = "block";
+            document.getElementById("new_name").focus();
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        function confirmDelete(type) {
+            var userCheck;
+            if (type == "losers") {
+                userCheck = confirm("Are you sure you want to archive the losers?");
+            } else {
+                userCheck = confirm("Are you sure you want to archive the winners?");
+            }
+            if (userCheck) {
+                if (type == "losers") {
+                    document.location = "/archive_losers";
+                } else if (type == "archive") {
+                    document.location = "/archive_winners";
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
