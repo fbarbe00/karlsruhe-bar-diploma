@@ -1,11 +1,11 @@
 # Karlsruhe Cocktail Bachelor und Master server
-This is a simple web server used in a shady Karlsruhe bar.
+This is a simple web server used in a studen bar in Karlsruhe.
 
 The idea is simple: customers can challenge themselves to a bachelor or a master cocktail diploma. Those imply drinking either a certain number of cocktails, 5 and 8 by default (this can be configured in `TYPES` in `karl_drink.py`). Anyone working behind the bar can connect to the server, add the customer, and have an overview of all current customers.
 Whenever a customer feels like taking a drink, the barman can select the customer on the interface and select the drink.
 Customers can access a list of most popular drinks.
 
-The code it's fairly messy, but it (should) work.
+The code it's fairly messy, but it (should) work. The biggest mistake in the code is using the names as ids, a number should ideally be used instead.
 
 Enjoy.
 

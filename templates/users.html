@@ -27,9 +27,13 @@
             <!-- for each user -->
             {%for user in users%}
             <div class="user-type {%if user.completed%}selected{%endif%}" id="{{user.name}}" onclick="location.href='/user/{{user.name}}'">
-                <img src="{{url_for('static', filename=user.type + '.png')}}" alt="German Beer Drinker" /><br> {{user.name}}
+                <img src="{{url_for('static', filename=user.type + '.png')}}" alt="German Beer Drinker" /><br>
+                <p class="w3-center w3-large">{{user.name}}</p>
             </div>
             {% endfor %}
+            {% if users|length == 0 %}
+            <p class="w3-center w3-large" style="font-style: italic;">Keine Schlümpfe. Füge einen hinzu!</p>
+            {% endif %}
         </section>
 
         <div id="addUser">

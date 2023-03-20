@@ -41,5 +41,13 @@
     {
         "name": "Hawaiian Wodka",
         "img": "drink.png"
+    },
+    {
+        "name": "Cosmopolitan",
+        "img": "drink.png"
+    },
+    {
+        "name": "London Mule",
+        "img": "drink.png"
     }
 ]

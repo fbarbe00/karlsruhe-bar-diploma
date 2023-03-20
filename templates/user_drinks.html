@@ -12,29 +12,45 @@
 <body id="body" class="drinks">
     <div class="container">
         {% if error_msg %}
-        <div class="error">
+        <div class="error w3-panel w3-red">
             {{ error_msg }}
         </div>
         {% endif %}
         <section id="intro">
-            <h2>{{ user.name }} ({{progress.type}})</h2>
-            <progress id="progress" value="{{progress.current}}" max="{{progress.total}}"> {{progress.current/progress.total}}% </progress>
-        </section>
-        <!-- <div style="text-align:right">
-            <input id="remove_check" class="w3-check" type="checkbox" onclick="document.getElementById('body').classList.toggle('danger');">
-            <label>Remove Drinks</label></p>
-        </div> -->
-        <section id="select">
-            {%for drink in drinks%} {% if drink.ordered %}
-            <div class="user-type selected" onclick="handleDrink(this)" id="{{loop.index}}">
-                <img src="{{url_for('static', filename=drink.img)}}" alt="German Beer Drinker" /><br> {{drink.name}}
-            </div>
+            <h1 class="w3-center">
+                {% if user.completed %}
+                    <s>
+                {% endif %}
+                {{ user.name }} ({{progress.type}})
+                {% if progress.current == progress.total %}
+                    <i class="fa fa-check-circle" style="color: green;"></i>
+                {% endif %}
+                {% if user.completed %}
+                    </s>
+                {% endif %}
+            </h1>
+            {% if progress.current >= progress.total and not user.completed %}
+                <a href="/finished/{{user.name}}" class="w3-button w3-pink w3-round">Abgeschlossen</a>
             {% else %}
-            <div class="user-type" onclick="handleDrink(this)" id="{{loop.index}}">
-                <img src="{{url_for('static', filename=drink.img)}}" alt="German Beer Drinker" /><br> {{drink.name}}
+            <progress id="progress" value="{{progress.current}}" max="{{progress.total}}"> {{progress.current/progress.total}}%</progress>
+            {% endif %}
+        </section>
+        <section id="select">
+            {%for drink in drinks%} 
+            {% if drink.ordered %}
+            <div class="user-type selected" onclick="handleDrink(this)" id="{{loop.index}}" style="background-color: hsl({{loop.index*460/drinks|length}}, 80%, 50%);">
+                <img src="{{url_for('static', filename=drink.img)}}" alt="German Beer Drinker" /><br>
+                <p class="w3-center" style="font-family: 'Lobster', cursive; font-size: 1.5em;">{{drink.name}}</p>
+            </div>
+            </span>
+            {% else %}
+            <div class="user-type" onclick="handleDrink(this)" id="{{loop.index}}" style="background-color: hsl({{loop.index*460/drinks|length}}, 80%, 50%);">
+                <img src="{{url_for('static', filename=drink.img)}}" alt="German Beer Drinker" /><br>
+                <p class="w3-center" style="font-family: 'Lobster', cursive; font-size: 1.5em;">{{drink.name}}</p>
             </div>
             {% endif %} {% endfor %}
             <br />
+            </span>
         </section>
         <div id="addUser" onclick="location.href='/'">
             Home
@@ -50,13 +66,20 @@
             // var remove_mode = document.getElementById('remove_check').value;
             if (el.classList.contains('selected')) {
                 document.getElementById('body').classList.toggle('danger');
-                var userCheck = confirm("Are you sure you want to remove this drink?");
+                var userCheck = confirm("Bist du sicher, dass du diesen Drink wieder entfernen möchtest?");
                 if (userCheck) {
                     document.location = "/remove_drink/{{user.name}}/" + el.id;
                 }
                 // document.getElementById('remove_check').checked = false;
                 document.getElementById('body').classList.toggle('danger');
-            } else {
+            } else if ({{progress.current}} >= {{progress.total}}) {
+                // document.getElementById('body').classList.toggle('danger');
+                var userCheck = confirm("Dieser Benutzer hat bereits alle Drinks getrunken. Möchtest du ihn trotzdem nochmal trinken lassen?");
+                if (userCheck) {
+                    document.location = "/add_drink/{{user.name}}/" + el.id;
+                }
+            }
+            else {
                 document.location = "/add_drink/{{user.name}}/" + el.id;
             }
 

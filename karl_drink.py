@@ -95,8 +95,23 @@ def add_drink(smurf, drink):
         return redirect(url_for('user', smurf=smurf, error_msg='Benutzer hat dieses Getränk bereits bestellt!'))
     user['ordered_drinks'].append(drink)
     if len(user['ordered_drinks']) == TYPES[user['type']]:
-        user['completed'] = True
+        # user['completed'] = True
         user['name'] = user['name'] + ' (abgeschlossen)'
+    user['last_edit'] = session['username']
+    user['last_edit_date'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    json.dump(users, open(USERS_PATH, 'w'))
+    return redirect(url_for('user', smurf=user['name']))
+
+@app.route('/finished/<smurf>')
+def finished(smurf):
+    if not check_login():
+        return redirect(url_for('login'))
+    users = json.load(open(USERS_PATH))
+    user = [u for u in users if u['name'] == smurf]
+    if not user:
+        return redirect(url_for('userchoice', error_msg='Benutzer nicht gefunden'))
+    user = user[0]
+    user['completed'] = True
     user['last_edit'] = session['username']
     user['last_edit_date'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     json.dump(users, open(USERS_PATH, 'w'))
